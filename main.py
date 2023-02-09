@@ -1,7 +1,25 @@
 import sys
 import argparse
 import random
+import re
 
+class DisplayGenerator:
+    def decrypt_question(self,question):
+        script = re.findall(r'\[.*?\]', question)[0]
+        points = re.findall(r'\(.*?\)', question)[0]
+        question_string = question.split("[")[0].split("(")[0]
+
+        return(question_string,script,points)
+        
+
+    def show_question(self, question):
+        question_string, script, points = self.decrypt_question(question)
+
+        print("#######################################")
+        print(f"\n{question_string}\n")
+        print(f"Hilfe im Skript: {script}")
+        print(f"Punkte: {points}\n") if points != None else print("\n")
+        print("#######################################")
 
 class QuestionGenerator:
     def __init__(self, file):
@@ -15,8 +33,15 @@ class QuestionGenerator:
 
     def run(self):
         question_list = self.get_questions()
-        print("Finished!")
-        print(question_list)
+        
+
+        dg = DisplayGenerator()
+        dg.show_question(question_list[0])
+
+        # TODO: ask question
+        # TODO: wait for input
+        # TODO: delte question
+        
         
 
         
