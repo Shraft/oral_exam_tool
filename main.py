@@ -1,28 +1,26 @@
 import sys
+import argparse
 
 
+class QuestionGenerator:
+    def __init__(self, filename):
+        self.filename = filename
 
-def get_params():
-    if len(sys.argv) < 2:
-        print("Bitte als zweiten Parameter den Dateinamen der Fragen angeben.")
-        exit()
-    return(sys.argv[1])
+    def get_questions(self):
+        with open(self.filename) as f:
+            questions = [line.rstrip() for line in f]
+        return(questions)
     
-def get_questions(filename):
-    with open(filename) as f:
-        questions = [line.rstrip() for line in f]
-    return(questions)
-
-
-
-def main():
-    
-    questions = get_questions(get_params())
-
-
+    def run(self):
+        self.get_questions()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--file", help='input file with questions', default='questions.txt')
+    args = parser.parse_args()
+
+    generator = QuestionGenerator(args.file)
+    generator.run()
 
 
 
