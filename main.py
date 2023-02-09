@@ -5,8 +5,16 @@ import re
 
 class DisplayGenerator:
     def decrypt_question(self,question):
-        script = re.findall(r'\[.*?\]', question)[0]
-        points = re.findall(r'\(.*?\)', question)[0]
+        try:
+            script = re.findall(r'\[.*?\]', question)[0]
+        except:
+            print("Scriptangabe fehlt")
+            script = "unknown"
+        try:
+            points = re.findall(r'\(.*?\)', question)[0]
+        except:
+            print("Punkteangabe fehlt")
+            points = 0
         question_string = question.split("[")[0].split("(")[0]
 
         return(question_string,script,points)
@@ -15,11 +23,10 @@ class DisplayGenerator:
     def show_question(self, question):
         question_string, script, points = self.decrypt_question(question)
 
-        print("#######################################")
-        print(f"\n{question_string}\n")
-        print(f"Hilfe im Skript: {script}")
-        print(f"Punkte: {points}\n") if points != None else print("\n")
-        print("#######################################")
+        print("\n#################################################################")
+        print(f"\n\t{question_string}\n")
+        print(f"\tHilfe im Skript: {script}")
+        print(f"\tPunkte: {points}\n")
 
 class QuestionGenerator:
     def __init__(self, file):
@@ -33,13 +40,17 @@ class QuestionGenerator:
 
     def run(self):
         question_list = self.get_questions()
-        
-
         dg = DisplayGenerator()
-        dg.show_question(question_list[0])
 
-        # TODO: ask question
-        # TODO: wait for input
+        while len(question_list) != 0:    
+            dg.show_question(question_list[-1])
+
+            user_input = input("\n\tNext Question? (y/n): ")
+            if user_input == "y":
+                question_list.pop()
+            elif user_input == "n":
+                exit()
+        
         # TODO: delte question
         
         
