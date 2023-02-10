@@ -11,24 +11,26 @@ class DisplayGenerator:
         except:
             print("Scriptangabe fehlt")
             script = "unknown"
-        try:
-            points = re.findall(r'\(.*?\)', question)[0]
-        except:
-            print("Punkteangabe fehlt")
-            points = 0
         question_string = question.split("[")[0].split("(")[0]
 
-        return(question_string,script,points)
-        
+        return(question_string,script)
 
     def show_question(self, question, num_questions):
-        question_string, script, points = self.decrypt_question(question)
+        question_string, script = self.decrypt_question(question)
 
-        print("\n#################################################################")
-        print(f"\n\t{question_string}\n")
-        print(f"\tHilfe im Skript: {script}")
-        print(f"\tPunkte: {points}")
-        print(f"\tQuestions remaining: {num_questions}\n")
+        print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n#################################################################")
+        print(f"#\n#\t{question_string}\n#")
+        print(f"#\tHilfe im Skript: {script}")
+        print(f"#\tQuestions remaining: {num_questions}\n#")
+
+    def print_red(self, text, optional=""):
+        print(f"#\t [\033[0;31;49m{text}\033[0m]{optional}")
+    def print_green(self, text, optional=""):
+        print(f"#\t [\033[0;32;49m{text}\033[0m]{optional}")
+    def print_yellow(self, text, optional=""):
+        print(f"#\t [\033[0;33;49m{text}\033[0m]{optional}")
+    def print_blue(self, text, optional=""):
+        print(f"#\t [\033[0;34;49m{text}\033[0m]{optional}")
 
 class QuestionGenerator:
     def __init__(self, question_file):
@@ -68,7 +70,11 @@ class QuestionGenerator:
                 self.get_questions()
             dg.show_question(self.question_list[-1], len(self.question_list))
 
-            user_input = input("\n\t(y/n) Question succesfull\n\t(e) Exit\n\t(l) Generate new List: ")
+            dg.print_green("y", " - Richtig beantwortet")
+            dg.print_yellow("n", " - Falsch beantwortet")
+            dg.print_red("e", " - Sitzung beenden")
+            dg.print_blue("r", " - Sitzung zurücksetzen")
+            user_input = input("#\n#\tEingabe: ")
             if user_input == "y":
                 self.question_list.pop()
             elif user_input == "n":
@@ -76,7 +82,7 @@ class QuestionGenerator:
             elif user_input == "e":
                 self.save_questions()
                 exit()
-            elif user_input == "l":
+            elif user_input == "r":
                 self.get_questions()
 
 if __name__ == "__main__":
