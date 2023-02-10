@@ -64,7 +64,7 @@ class QuestionGenerator:
                 self.get_questions()
             dg.show_question(self.question_list[-1], len(self.question_list))
 
-            user_input = input("\n\tQuestion succesfull (y/n)\n\tExit(e)\n\tGenerate new List(l): ")
+            user_input = input("\n\t(y/n) Question succesfull\n\t(e) Exit\n\t(l) Generate new List: ")
             if user_input == "y":
                 self.question_list.pop()
             elif user_input == "n":
