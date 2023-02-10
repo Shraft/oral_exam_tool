@@ -37,10 +37,14 @@ class QuestionGenerator:
         self.question_list = []
 
     def get_questions(self):
-        with open(self.question_file) as f:
-            questions = [line.rstrip() for line in f]
-        random.shuffle(questions)
-        self.question_list = questions
+        if os.path.isfile(self.question_file):
+            with open(self.question_file) as f:
+                questions = [line.rstrip() for line in f]
+            random.shuffle(questions)
+            self.question_list = questions
+        else:
+            print("bitte mit --file <datei.txt> angeben :)")
+            exit()    
 
     def load_questions(self):
         if os.path.isfile(self.persistency_file):
@@ -77,9 +81,9 @@ class QuestionGenerator:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--question-file", help='filename of questionfile', default='questions.txt')
+    parser.add_argument("--file", help='filename of questionfile', default='questions.txt')
     args = parser.parse_args()
 
-    generator = QuestionGenerator(args.question_file)
+    generator = QuestionGenerator(args.file)
 
     generator.run()
