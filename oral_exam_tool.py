@@ -11,17 +11,15 @@ class DisplayGenerator:
         except:
             print("Scriptangabe fehlt")
             script = "unknown"
-        question_string = question.split("[")[0].split("(")[0]
+        question_string = question.split("[")[0].replace("?", "?\n#\t")
 
         return(question_string,script)
 
     def show_question(self, question, num_questions):
         question_string, script = self.decrypt_question(question)
-
-        print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n#################################################################")
-        print(f"#\n#\t{question_string}\n#")
-        print(f"#\tHilfe im Skript: {script}")
-        print(f"#\tQuestions remaining: {num_questions}\n#")
+        
+        print(f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n########### Script: \033[0;34;49m{script}\033[0m ########### Fragen übrig: [\033[0;33;49m{num_questions}\033[0m] ###########\n#")
+        print(f"#\t{question_string}")
 
     def print_red(self, text, optional=""):
         print(f"#\t [\033[0;31;49m{text}\033[0m]{optional}")
