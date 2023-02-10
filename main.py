@@ -31,9 +31,9 @@ class DisplayGenerator:
         print(f"\tQuestions remaining: {num_questions}\n")
 
 class QuestionGenerator:
-    def __init__(self, question_file, persistency_file):
+    def __init__(self, question_file):
         self.question_file = question_file
-        self.persistency_file = persistency_file
+        self.persistency_file = "." + question_file.split(".")[0] + ".pers" 
         self.question_list = []
 
     def get_questions(self):
@@ -78,9 +78,8 @@ class QuestionGenerator:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--question-file", help='filename of questionfile', default='questions.txt')
-    parser.add_argument("--persistency-file", help='filename of storaged questions', default='persistency.txt')
     args = parser.parse_args()
 
-    generator = QuestionGenerator(args.question_file, args.persistency_file)
+    generator = QuestionGenerator(args.question_file)
 
     generator.run()
