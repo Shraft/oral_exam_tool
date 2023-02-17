@@ -3,6 +3,7 @@ import argparse
 import random
 import re
 import os
+import keyboard
 
 class DisplayGenerator:
     def decrypt_question(self,question):
@@ -23,9 +24,11 @@ class DisplayGenerator:
             folie_number = "-"
         else:
             script = script.replace("S", "")
+            script = script.replace("[", "")
+            script = script.replace("]", "")
             script_number = script.split("F")[0]
             folie_number = script.split("F")[1]
-        print(f"########### Script:\033[0;34;49m{script_number}]\033[0m, Folie: \033[0;34;49m[{folie_number}\033[0m ########## Fragen übrig: [\033[0;33;49m{num_questions}\033[0m] ###########\n#")
+        print(f"########### Script:\033[0;34;49m{script_number}\033[0m, Folie: \033[0;34;49m{folie_number}\033[0m ########## Fragen übrig: [\033[0;33;49m{num_questions}\033[0m] ###########\n#")
         print(f"#\t{question_string}\n#")
 
     def print_red(self, text, optional=""):
