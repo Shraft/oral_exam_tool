@@ -3,7 +3,6 @@ import argparse
 import random
 import re
 import os
-import keyboard
 
 class DisplayGenerator:
     def decrypt_question(self,question):
