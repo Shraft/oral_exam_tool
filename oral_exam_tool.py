@@ -75,7 +75,7 @@ class QuestionGenerator:
             if(len(self.question_list) == 0):
                 "Questionlist empty! generated new one..."
                 self.get_questions()
-            dg.show_question(self.question_list[-1], len(self.question_list))
+            dg.show_question(self.question_list[-1], int(len(self.question_list)-1))
 
             dg.print_green("y", " - Richtig beantwortet")
             dg.print_yellow("n", " - Falsch beantwortet")
