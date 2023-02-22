@@ -1,4 +1,3 @@
-import sys
 import argparse
 import random
 import re
@@ -15,7 +14,7 @@ class DisplayGenerator:
 
         return(question_string,script)
 
-    def show_question(self, question, num_questions):
+    def show_question(self, question, num_questions, show_menu):
         question_string, script = self.decrypt_question(question)
         os.system("clear")
         if script == "unknown":
@@ -27,8 +26,23 @@ class DisplayGenerator:
             script = script.replace("]", "")
             script_number = script.split("F")[0]
             folie_number = script.split("F")[1]
-        print(f"########### Script: \033[0;34;49m{script_number}\033[0m, Folie: \033[0;34;49m{folie_number}\033[0m ########## Fragen übrig: [\033[0;33;49m{num_questions}\033[0m] ###########\n#")
+        print(f"##### Script: \033[0;34;49m{script_number}\033[0m, Folie: \033[0;34;49m{folie_number}\033[0m ####### Fragen übrig: [\033[0;33;49m{num_questions}\033[0m] #####\n#")
         print(f"#\t{question_string}\n#")
+
+        if show_menu == True:
+            self.show_hint()
+            self.show_menu()
+        else:
+            self.show_hint()
+
+    def show_hint(self):
+        self.print_blue("m"," - Menü anzeigen / verstecken")
+
+    def show_menu(self):
+        self.print_green("y", " - Richtig beantwortet")
+        self.print_yellow("n", " - Falsch beantwortet")
+        self.print_red("e", " - Sitzung beenden")
+        self.print_blue("r", " - Sitzung zurücksetzen")
 
     def print_red(self, text, optional=""):
         print(f"#\t [\033[0;31;49m{text}\033[0m]{optional}")
@@ -44,6 +58,7 @@ class QuestionGenerator:
         self.question_file = question_file
         self.persistency_file = "." + question_file.split(".")[0] + ".pers" 
         self.question_list = []
+        self.show_menu = False
 
     def get_questions(self):
         if os.path.isfile(self.question_file):
@@ -75,12 +90,8 @@ class QuestionGenerator:
             if(len(self.question_list) == 0):
                 "Questionlist empty! generated new one..."
                 self.get_questions()
-            dg.show_question(self.question_list[-1], int(len(self.question_list)-1))
+            dg.show_question(self.question_list[-1], int(len(self.question_list)-1), self.show_menu)
 
-            dg.print_green("y", " - Richtig beantwortet")
-            dg.print_yellow("n", " - Falsch beantwortet")
-            dg.print_red("e", " - Sitzung beenden")
-            dg.print_blue("r", " - Sitzung zurücksetzen")
             user_input = input("#\n#\tEingabe: ")
             if user_input == "y":
                 self.question_list.pop()
@@ -91,7 +102,9 @@ class QuestionGenerator:
                 exit()
             elif user_input == "r":
                 self.get_questions()
-
+            elif user_input == "m":
+                self.show_menu = True if (self.show_menu == False) else False
+ 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--file", help='filename of questionfile', default='questions.txt')
