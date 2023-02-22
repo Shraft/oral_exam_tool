@@ -8,7 +8,6 @@ class DisplayGenerator:
         try:
             script = re.findall(r'\[.*?\]', question)[0]
         except:
-            print("Scriptangabe fehlt")
             script = "unknown"
         question_string = question.split("[")[0].replace("?", "?\n#\t")
 
@@ -18,40 +17,26 @@ class DisplayGenerator:
         question_string, script = self.decrypt_question(question)
         os.system("clear")
         if script == "unknown":
-            script_number = "-"
-            folie_number = "-"
+            script_number, folie_number = "-", "-"
         else:
-            script = script.replace("S", "")
-            script = script.replace("[", "")
-            script = script.replace("]", "")
-            script_number = script.split("F")[0]
-            folie_number = script.split("F")[1]
+            script = script.replace("S", "").replace("[", "").replace("]", "")
+            script_number, folie_number = script.split("F")[0], script.split("F")[1]
         print(f"##### Script: \033[0;34;49m{script_number}\033[0m, Folie: \033[0;34;49m{folie_number}\033[0m ####### Fragen übrig: [\033[0;33;49m{num_questions}\033[0m] #####\n#")
         print(f"#\t{question_string}\n#")
 
+        self.show_hint()
         if show_menu == True:
-            self.show_hint()
             self.show_menu()
-        else:
-            self.show_hint()
 
     def show_hint(self):
-        self.print_blue("m"," - Menü anzeigen / verstecken")
+        print(f"#\t [\033[0;34;49mm\033[0m] - Menü anzeigen / verstecken") # blau
 
     def show_menu(self):
-        self.print_green("y", " - Richtig beantwortet")
-        self.print_yellow("n", " - Falsch beantwortet")
-        self.print_red("e", " - Sitzung beenden")
-        self.print_blue("r", " - Sitzung zurücksetzen")
+        print(f"#\t [\033[0;32;49my\033[0m] - Richtig beantwortet") # green
+        print(f"#\t [\033[0;33;49mn\033[0m] - Falsch beantwortet")  # rot
+        print(f"#\t [\033[0;31;49me\033[0m] - Sitzung beenden")     # gelb
+        print(f"#\t [\033[0;35;49mr\033[0m] - Sitzung zurücksetzen")# grau
 
-    def print_red(self, text, optional=""):
-        print(f"#\t [\033[0;31;49m{text}\033[0m]{optional}")
-    def print_green(self, text, optional=""):
-        print(f"#\t [\033[0;32;49m{text}\033[0m]{optional}")
-    def print_yellow(self, text, optional=""):
-        print(f"#\t [\033[0;33;49m{text}\033[0m]{optional}")
-    def print_blue(self, text, optional=""):
-        print(f"#\t [\033[0;34;49m{text}\033[0m]{optional}")
 
 class QuestionGenerator:
     def __init__(self, question_file):
@@ -67,7 +52,7 @@ class QuestionGenerator:
             random.shuffle(questions)
             self.question_list = questions
         else:
-            print("bitte mit --file <datei.txt> angeben :)")
+            print(f"Datei {self.question_file} konnte im aktuellen Verzeichnis nicht gefunden werden")
             exit()    
 
     def load_questions(self):
@@ -81,7 +66,6 @@ class QuestionGenerator:
             file.write(question +"\n")
         file.close()
     
-
     def run(self):
         self.load_questions()
         dg = DisplayGenerator()
@@ -92,7 +76,8 @@ class QuestionGenerator:
                 self.get_questions()
             dg.show_question(self.question_list[-1], int(len(self.question_list)-1), self.show_menu)
 
-            user_input = input("#\n#\tEingabe: ")
+            user_input = input("#\n#\tEingabe: \033[0;34;49m")
+            print("\033[0m]")
             if user_input == "y":
                 self.question_list.pop()
             elif user_input == "n":
@@ -109,7 +94,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--file", help='filename of questionfile', default='questions.txt')
     args = parser.parse_args()
-
     generator = QuestionGenerator(args.file)
-
     generator.run()
